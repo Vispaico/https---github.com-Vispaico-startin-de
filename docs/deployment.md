@@ -2,11 +2,13 @@
 
 ## Local development
 
-1. Install Node.js 20.9+ and npm.
+1. Install Node.js 20.16+ and npm (the version required by `package.json`).
 2. Copy `.env.example` to `.env.local`.
-3. For an isolated local walkthrough, set `LOCAL_DEV_AUTH=true` and set `LOCAL_DEV_SECRET` to a unique random value at least 32 characters long. Sign in as `candidate@example.test` with that value as the password. Local uploads are private files under `.private-data/`; never use this adapter in production.
+3. For an isolated local walkthrough, set `LOCAL_DEV_AUTH=true` and set `LOCAL_DEV_SECRET` to a unique random value at least 32 characters long. You can create a candidate account at `/signup`; local account records and scrypt password hashes are stored with mode-restricted permissions under `.private-data/`. The legacy `candidate@example.test` test login also remains available with `LOCAL_DEV_SECRET` as its password. Local uploads are private files under `.private-data/`; never use this adapter in production.
 4. Run `npm install`, `npm run dev`, then open `http://localhost:3000`.
 5. Run `npm test` and `npm run typecheck` before a release.
+
+The public website is available at `/vi`, `/de` and `/en`; `/` redirects to `/vi`. The private Document Check Centre remains at `/app`, with sign-in and registration at `/login` and `/signup`. Set `NEXT_PUBLIC_APP_URL` to the final HTTPS origin so canonical links, language alternates, the sitemap and robots file point at the production site.
 
 The local adapter intentionally does not run the OCR/model worker. It does not invent reports. To exercise real processing, use a test Supabase project with approved scanner/OCR/LLM endpoints.
 
@@ -14,7 +16,7 @@ The local adapter intentionally does not run the OCR/model worker. It does not i
 
 1. Create a Supabase project in a region approved for the service's privacy and transfer requirements.
 2. Apply the SQL migration in `supabase/migrations/` using Supabase CLI or the SQL migration workflow.
-3. Configure Supabase Auth email/password sign-in and approved redirect URLs.
+3. Configure Supabase Auth email/password sign-in, email confirmation and approved redirect URLs. Candidate registration is available at `/signup`; confirmation emails are sent by Supabase Auth using its configured SMTP/provider settings. The app's `EMAIL_API_KEY` setting is not used for authentication emails.
 4. Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and the private bucket name in the hosting provider's server environment. The service-role key is private; do not prefix it with `NEXT_PUBLIC_`.
 5. Create advisor/admin accounts through the trusted administrator process and set their `app_metadata.role` to `advisor` or `admin`. Never use user-editable `user_metadata` for role decisions.
 6. Configure `WORKER_SECRET` as a high-entropy secret. Schedule a private POST to `/api/worker/process` with `Authorization: Bearer <secret>` at a short interval. A `worked:false` result means there was no queued work. Keep the response body out of public monitoring logs.
@@ -32,3 +34,12 @@ The local adapter intentionally does not run the OCR/model worker. It does not i
 - Account erasure must remove each private object through the Storage API before deleting its auth user. Database cascades alone do not remove object bytes.
 - Rotate provider, service-role, scanner and worker secrets through the hosting secret manager. Never add `.env.local`, `.private-data/`, candidate files or anonymisation keys to source control.
 - Legal review in Vietnam and Germany, privacy notice completion, provider approval and data processing agreements are launch gates from the implementation brief.
+
+## Public website launch gates
+
+- Read `docs/public-launch-readiness.md` before enabling public marketing or commercial services.
+- Proposed service prices are informational only. There is no checkout or payment collection; keep every `checkoutEnabled` flag false until scope, tax, terms and refund details have owner and legal approval.
+- Contact and partnership pages are transparent placeholders because a verified public inbox and partner approvals have not been supplied. Add those details only after confirmation; do not publish candidate document content in support workflows.
+- Privacy, terms and refund routes are noindex drafts pending approved legal text and business identity. Do not describe them as complete policies.
+- No analytics or advertising tags are enabled. If introduced, obtain the appropriate review and consent before loading them.
+- Replace only the named image placeholders documented in `assets/image-manifest.md`; originals in `assets/incoming/` are retained.

@@ -3,15 +3,20 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { config } from '@/lib/config';
 import { createLocalSession, SESSION_COOKIE } from '@/lib/auth/session';
+import { verifyLocalAccount } from '@/lib/auth/local-accounts';
 import { isSameOrigin } from '@/lib/security/request';
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return NextResponse.json({ error: 'Request origin is not allowed.' }, { status: 403 });
   const body = await request.json().catch(() => null);
   if (config.localAuth) {
-    if (!body || body.email !== 'candidate@example.test' || body.password !== process.env.LOCAL_DEV_SECRET) return NextResponse.json({ error: 'Use the local test account and configured development password.' }, { status: 401 });
+    const email = typeof body?.email === 'string' ? body.email : '';
+    const password = typeof body?.password === 'string' ? body.password : '';
+    const account = await verifyLocalAccount(email, password);
+    const legacyTestAccount = email.trim().toLowerCase() === 'candidate@example.test' && password === process.env.LOCAL_DEV_SECRET;
+    if (!account && !legacyTestAccount) return NextResponse.json({ error: 'Email or password was not accepted.' }, { status: 401 });
     const response = NextResponse.json({ ok: true });
-    response.cookies.set(SESSION_COOKIE, createLocalSession({ id: 'local-candidate-001', email: 'candidate@example.test', role: 'candidate' }), { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/', maxAge: 8 * 60 * 60 });
+    response.cookies.set(SESSION_COOKIE, createLocalSession({ id: account?.id || 'local-candidate-001', email: account?.email || 'candidate@example.test', role: 'candidate' }), { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/', maxAge: 8 * 60 * 60 });
     return response;
   }
   if (!config.hasSupabase) return NextResponse.json({ error: 'Authentication is not configured. Set up Supabase or enable local development auth.' }, { status: 503 });

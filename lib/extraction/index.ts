@@ -10,7 +10,7 @@ export type ExtractionResult = { method: 'pdf_text' | 'docx_text' | 'ocr'; text:
 export async function extractDocument(bytes: Buffer, mimeType: string): Promise<ExtractionResult> {
   if (mimeType === 'application/pdf') {
     const parser = new PDFParse({ data: bytes });
-    let text = ''; let pageCount = 1; let pages: ExtractedPage[] = [];
+    let text = ''; let pageCount = 1; let pages: ExtractedPage[] = []; let parseFailed = false;
     try {
       const info = await parser.getInfo();
       pageCount = Math.max(1, info.total || 1);
@@ -21,8 +21,11 @@ export async function extractDocument(bytes: Buffer, mimeType: string): Promise<
         if (pageText) pages.push({ page, text: pageText });
       }
       text = pages.map((page) => page.text).join('\n\n').trim();
+    } catch {
+      // A damaged or image-only PDF may not be parseable as text; try the configured OCR path.
+      parseFailed = true;
     } finally { await parser.destroy(); }
-    if (text.length >= Math.max(80, pageCount * 25)) {
+    if (!parseFailed && text.length >= Math.max(80, pageCount * 25)) {
       return { method: 'pdf_text', text, pages, pageCount, pageReferencesAvailable: pages.length > 0, quality: text.length > 300 ? 'good' : 'partial', ocrUsed: false, providerMetadata: { parser: 'pdf-parse' } };
     }
     let ocr;
