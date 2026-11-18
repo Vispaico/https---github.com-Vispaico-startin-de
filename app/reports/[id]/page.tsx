@@ -1,0 +1,15 @@
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import { getSessionUser } from '@/lib/auth/session';
+import { getCandidateReport, getCandidateFeedback, getDocument } from '@/lib/documents/store';
+import ReportActions from './report-actions';
+import RequestReview from './request-review';
+
+export default async function ReportPage({ params }: { params: Promise<{ id: string }> }) {
+  const user = await getSessionUser(); if (!user) redirect('/login');
+  const { id } = await params; const result = await getCandidateReport(user.id, id); if (!result) notFound();
+  const doc = await getDocument(user.id, result.document_id); if (!doc) notFound();
+  const advisorFeedback = await getCandidateFeedback(user.id, doc.id);
+  const report = result.report_json as { summary: string; outcome: string; findings: Array<{ id: string; severity: string; title: string; explanation: string; recommendation?: string; evidence?: { page?: number; quote?: string } }>; suggestedNextSteps: string[]; limitations: string[]; extraction: { status: string; pageCount?: number; ocrUsed: boolean }; humanReviewRecommended: boolean };
+  return <div className="page-shell detail-shell"><Link className="back-link" href={`/documents/${doc.id}`}>← Back to document</Link><section className="panel report-card"><p className="eyebrow">DOCUMENT REVIEW · {new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' }).format(new Date(result.created_at))}</p><h1>Your feedback</h1><p className="lead">{doc.originalFilename}</p><div className="report-outcome"><span className={`outcome-pill ${report.outcome}`}>{report.outcome.replaceAll('_', ' ')}</span><p>{report.summary}</p></div><div className="report-scope"><strong>What this review can tell you</strong><p>This is an automated application quality check. It is not legal or visa advice and does not determine qualification recognition, authenticity, or employer acceptance.</p></div>{advisorFeedback && <div className="advisor-feedback"><p className="eyebrow">STARTIN-DE ADVISOR</p><h2>Human review feedback</h2><p>{advisorFeedback}</p></div>}<h2>Findings</h2>{report.findings.length ? <div className="finding-list">{report.findings.map((item) => <article className="finding" key={item.id}><span className={`severity ${item.severity}`}>{item.severity}</span><h3>{item.title}</h3><p>{item.explanation}</p>{item.evidence?.quote && <blockquote>“{item.evidence.quote}”{item.evidence.page ? <small> · Page {item.evidence.page}</small> : null}</blockquote>}{item.recommendation && <p className="recommendation"><strong>Next step:</strong> {item.recommendation}</p>}</article>)}</div> : <p>No document findings were returned.</p>}{report.suggestedNextSteps.length > 0 && <><h2>Suggested next steps</h2><ul>{report.suggestedNextSteps.map((step, index) => <li key={index}>{step}</li>)}</ul></>}{report.limitations.length > 0 && <><h2>Limitations</h2><ul>{report.limitations.map((text, index) => <li key={index}>{text}</li>)}</ul></>}{report.humanReviewRecommended && <RequestReview documentId={doc.id} />}<ReportActions /></section></div>;
+}
