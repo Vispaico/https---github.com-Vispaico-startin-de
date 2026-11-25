@@ -1,20 +1,24 @@
 # STARTIN-DE public image manifest
 
-Original uploads are preserved unchanged in `assets/incoming/`. Optimized copies are used by the public website from `public/images/`.
+This inventory reflects the images currently selected by the public pages. Original files in `assets/incoming/` and all existing files under `public/images/` are preserved.
 
-| Source original | Optimized copy | Dimensions | Use and alt text |
-| --- | --- | ---: | --- |
-| `startin-de_2girls_smiling-at-eachother.jpeg` | `public/images/hero/people-on-their-way.webp` | 1800 × 1200 | Homepage hero. Alt: “Two people talking beside an urban rail platform.” The image is not presented as a STARTIN-DE customer story or as proof of a location, employer or outcome. |
-| `startin-de_young-man-with-young-woman.jpeg` | `public/images/pathways/people-in-conversation.webp` | 1800 × 1286 | About page. Alt: “Two people talking outdoors.” No relationship, occupation or customer identity is inferred. |
-| `startin-de_girl_on_working_desk.jpeg` | `public/images/guides/research-at-a-desk.webp` | 1800 × 1200 | Study pathway. Alt: “A person using a laptop at a desk.” It is used as general research imagery, not presented as a German campus or named student. |
-| `public/startinde_logo.webp` | `public/images/brand/startinde-logo.webp` | Preserved copy | Public site header. Original logo remains unchanged at `public/startinde_logo.webp`. |
+| Page / use | Current file | Description used by the page |
+| --- | --- | --- |
+| Home hero | `public/images/hero/people-in-front-of-barrels.webp` | Two people wearing football shirts sit in front of stacked beer kegs. The alt text describes the visible scene and does not imply a STARTIN-DE customer story or partnership. |
+| Ausbildung | `public/images/ausbildung/azubis.webp` | Three people examining a machine together in a technical workshop. |
+| Study | `public/images/guides/mensa.webp` | People seated in a lecture hall during a presentation. |
+| Work | `public/images/work/builders.webp` | Two construction workers wearing high-visibility clothing at a work site. |
+| Opportunities | `public/images/opportunities/master-and-student.webp` | A younger and an older person working together at an audio mixing console. The alt text does not claim a specific relationship or credential. |
+| About | `public/images/pathways/tuebingen-germany.webp` | Historic row of colorful buildings in Tübingen, Germany. |
+| Public header and footer | `public/images/brand/startinde_logo.webp` | STARTIN-DE logo. |
+| Social preview image | `public/images/hero/people-on-their-way.webp` | Two people talking beside an urban rail platform. |
 
-## Additional image requests
+## Other retained images
 
-The following are intentionally represented by labeled neutral placeholders until the owner supplies suitable images:
+These files remain available but are not currently selected by the page components: `public/images/pathways/people-in-conversation.webp`, `public/images/guides/research-at-a-desk.webp`, and `public/images/brand/startinde-logo1.webp`. No files were deleted when the image selections changed.
 
-- Ausbildung: a person practising in an authentic vocational training environment in Germany, such as a technical workshop or service setting. Do not imply an existing STARTIN-DE placement.
-- Skilled work: a realistic professional workplace in Germany. Do not imply a verified employer relationship.
-- Partner page: a real training or education setting. Do not show partner marks or suggest an existing partnership.
+## Placeholder still in use
 
-The current photo set does not include a clear training workshop, university campus or skilled workplace. The originals have not been moved, converted or overwritten.
+- Partners page: a neutral training or education setting. Do not show partner marks or suggest an existing partnership without approval.
+
+`assets/incoming/` still contains the three original JPEGs from the first image batch. Newly supplied/renamed assets were placed directly in `public/images/`; those current files are used as-is, without overwriting the original JPEGs.

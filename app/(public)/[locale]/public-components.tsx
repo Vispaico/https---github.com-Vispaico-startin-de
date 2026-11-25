@@ -25,7 +25,7 @@ export function PublicFooter({ locale }: { locale: Locale }) {
   ];
   return <footer className="public-footer">
     <div className="public-footer-main">
-      <div className="footer-brand"><Link href={localizedHref(locale)} aria-label={t.homeLabel}><Image className="footer-brand-logo" src="/images/brand/startinde-logo.webp" alt="STARTIN-DE" width={132} height={38} /></Link><p>{publicLabels[locale].homeTagline}</p></div>
+      <div className="footer-brand"><Link href={localizedHref(locale)} aria-label={t.homeLabel}><Image className="footer-brand-logo" src="/images/brand/startinde_logo.webp" alt="STARTIN-DE" width={132} height={38} /></Link><p>{publicLabels[locale].homeTagline}</p></div>
       {columns.map((column, index) => <nav className="footer-column" aria-label={`${t.footerGroups[index]}`} key={index}><h2>{t.footerGroups[index]}</h2>{column.map((item) => <Link key={item.href} href={localizedHref(locale, item.href)}>{item.title}</Link>)}</nav>)}
     </div>
     <div className="public-footer-bottom"><span>© {new Date().getFullYear()} STARTIN-DE</span><p></p><Link href="/login?next=%2Fapp">{t.signIn} ↗</Link></div>

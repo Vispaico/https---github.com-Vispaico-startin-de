@@ -27,7 +27,7 @@ export default function PublicHeader({ locale }: { locale: Locale }) {
     <header className="public-header">
       <div className="public-header-inner">
         <Link className="public-brand" href={`/${locale}`} aria-label={t.homeLabel} onClick={() => setOpen(false)}>
-          <Image src="/images/brand/startinde-logo.webp" alt="STARTIN-DE" width={180} height={52} priority />
+          <Image src="/images/brand/startinde_logo.webp" alt="STARTIN-DE" width={180} height={52} priority />
         </Link>
         <button className="menu-toggle" type="button" aria-expanded={open} aria-controls={menuId} aria-label={open ? t.closeMenu : t.menu} onClick={() => setOpen(!open)}>
           <span></span><span></span><span></span>
