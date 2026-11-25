@@ -24,7 +24,7 @@ export default async function PublicHome({ params }: { params: Promise<{ locale:
         <div className="hero-actions"><LinkButton href={localizedHref(locale, 'ausbildung')}>{h.primary}</LinkButton><LinkButton href={localizedHref(locale, 'tools/document-check')} tone="line">{h.secondary}</LinkButton></div>
         <p className="hero-reassurance"><span aria-hidden="true">✓</span>{h.reassure}</p>
       </div>
-      <div className="home-hero-art"><div className="hero-image-frame"><Image src="/images/hero/people-on-their-way.webp" alt={locale === 'vi' ? 'Hai người đang trò chuyện bên một sân ga đô thị' : locale === 'de' ? 'Zwei Personen im Gespräch an einem städtischen Bahnsteig' : 'Two people talking beside an urban rail platform'} fill priority sizes="(max-width: 760px) 100vw, 48vw" /></div><div className="hero-caption"><span className="caption-dot" /><span>{locale === 'vi' ? 'Thông tin rõ ràng · Chuẩn bị chủ động' : locale === 'de' ? 'Klare Informationen · selbstbestimmte Vorbereitung' : 'Clear information · practical preparation'}</span></div></div>
+      <div className="home-hero-art"><div className="hero-image-frame"><Image src="/images/hero/people-in-front-of-barrels.webp" alt={locale === 'vi' ? 'Hai người đang trò chuyện bên một sân ga đô thị' : locale === 'de' ? 'Zwei Personen im Gespräch an einem städtischen Bahnsteig' : 'Two people talking beside an urban rail platform'} fill priority sizes="(max-width: 760px) 100vw, 48vw" /></div></div>
     </section>
 
     <section className="public-section section-pathways"><div className="public-container"><SectionHeading eyebrow={`01 / ${labels.pathways}`} title={h.pathTitle} intro={h.pathIntro} />
